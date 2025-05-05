@@ -1,0 +1,35 @@
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files and backups
+*.tfstate
+*.tfstate.backup
+
+# Crash logs
+crash.log
+
+# Sensitive variable files
+*.tfvars
+*.tfvars.json
+
+# Override files (can contain sensitive data)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform plan output
+*.plan
+
+# .terraform.lock.hcl can be included or excluded depending on your workflow
+# Include it if you want to pin provider versions across teams
+# Exclude it if you prefer fresh provider installs every time
+# Uncomment the line below to exclude it:
+# .terraform.lock.hcl
+
+# IDE/editor files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
