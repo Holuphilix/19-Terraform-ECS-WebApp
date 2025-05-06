@@ -27,25 +27,43 @@ mkdir app modules
 mkdir modules/ecr modules/ecs modules/network
 ```
 
-Your directory structure now looks like this:
+### 📁 Project Directory Structure
 
 ```
 terraform-ecs-webapp/
 │
-├── app/                          # Dynamic web app source code
-├── modules/
-│   ├── ecr/                      # Terraform module for Amazon ECR
-│   ├── ecs/                      # Terraform module for ECS cluster and service
-│   └── network/                  # Terraform module for VPC, subnets, security group
+├── app/                               # Web application (Dockerized Node.js app)
+│   ├── index.js
+│   ├── package.json
+│   ├── Dockerfile
+│   └── node_modules/                  # Generated after `npm install`
 │
-├── main.tf                       # Root Terraform config
-├── variables.tf
-├── outputs.tf
-├── terraform.tfvars
-└── README.md                     # Project documentation
+├── modules/                           # Terraform modules
+│   ├── ecr/                           # Amazon ECR module
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
+│   ├── ecs/                           # Amazon ECS module (Cluster, Task, Service)
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
+│   └── network/                       # VPC, Subnets, Security Group
+│       ├── main.tf
+│       ├── variables.tf
+│       └── outputs.tf
+│
+├── Images/                            # Screenshots used in README.md
+│   └── (e.g. AWS_ECR_Creation.png)
+│
+├── main.tf                            # Root configuration calling all modules
+├── variables.tf                       # Variables passed to modules
+├── outputs.tf                         # Outputs from root modules
+├── terraform.tfvars                   # Actual values for variables
+├── .gitignore                         # To ignore unnecessary files
+└── README.md                          # Full project documentation
 ```
-
-> ✅ Let’s now begin with **Task 1** – building and Dockerizing your app.
 
 ## ✅ Task 1: Dockerization of Web App
 
@@ -150,10 +168,7 @@ Open your browser and go to:
 ```
 http://localhost:3000
 ```
-
-You should see:
-
-> 🚀 Hello from your Dockerized Web App on ECS!
+![localhost](./Images/5.localhost_3000.png)
 
 
 ## ✅ Task 2: Terraform Module for Amazon ECR
@@ -176,8 +191,6 @@ Create the required Terraform configuration files:
 ```bash
 touch main.tf variables.tf outputs.tf
 ```
-
----
 
 ### 🧱 `main.tf` – Create ECR Repository
 
@@ -527,6 +540,7 @@ terraform apply
 ```
 
 Wait for the ECS service to be deployed.
+
 ![ECS delpolyed to AWS console](./Images/3.AWS_ECS_creation.png)
 
 ##  Task 4: Main Terraform Configuration
@@ -604,7 +618,7 @@ terraform plan
 terraform apply
 ```
 
-### Task 5: Deployment
+## Task 5: Deployment
 
 For **Task 5**, we'll break it down step by step, as described. This involves:
 
@@ -612,7 +626,6 @@ For **Task 5**, we'll break it down step by step, as described. This involves:
 2. **Pushing the Docker image** to the Amazon ECR repository that was created by Terraform.
 3. **Running Terraform** commands to deploy the ECS cluster and web app.
 4. **Accessing the web app** through the public IP or DNS of the ECS service.
-
 
 ### 1. **Build the Docker Image of Your Web App**
 
@@ -691,6 +704,7 @@ After the ECS service is successfully deployed, you can access the web app.
 - Under the **Load balancer** section, you will find the **DNS name** or **public IP** of your web app.
 
 **ECS Service Public IP **
+
 ```bash
 http://3.236.157.221
 ```
@@ -698,7 +712,7 @@ You can now access your deployed web app via the provided URL.
 **Screenshot: ECS Service Public IP**
 ![Acess browser](./Images/4.Public_IP_accessed.png)
 
-### ✅ **Task 6: Document Observations & Challenges**
+## ✅ **Task 6: Document Observations & Challenges**
 
 Create a section in your README.md or a separate markdown file called `observations.md`. Here's a template to guide you:
 
@@ -718,7 +732,35 @@ Create a section in your README.md or a separate markdown file called `observati
 * Remembered to run `docker build`, `tag`, and `push` **before** running `terraform apply`.
 * Ensured VPC, subnets, and route tables were correctly associated or the service wouldn’t deploy.
 
-### ✅ **Task 7: Git Version Control**
+### ✅ **Conclusion**
+
+This project demonstrated how to host a **Dockerized dynamic web application** on **AWS ECS with Fargate**, using **Terraform modules** to provision infrastructure as code. We successfully:
+
+* Created modular Terraform configurations for VPC, Subnets, Security Groups, ECR, and ECS.
+* Dockerized the application and pushed the image to Amazon ECR.
+* Deployed the containerized app to ECS with a public IP, making it accessible via browser.
+* Ensured security via port-specific rules and proper subnet associations.
+
+**Overall**, this project shows how powerful and scalable cloud-native applications can be when managed with IaC and containerization best practices.
+
+### 🧹 **Destroying Terraform Resources**
+
+To clean up all AWS resources created by Terraform:
+
+```bash
+terraform destroy
+```
+
+This will:
+
+* Delete the ECS service and cluster
+* Remove the ECR repository (but not the image manually unless included)
+* Tear down VPC, subnets, route tables, internet gateway
+* Remove IAM roles and task definitions
+
+> ⚠️ **Warning**: This will remove everything defined in your Terraform state. Ensure you're okay with that before proceeding.
+
+## ✅ **Task 7: Git Version Control**
 
 Here’s what to do:
 
@@ -749,7 +791,21 @@ Here’s what to do:
 4. **Push to GitHub**:
 
    ```bash
-   git remote add origin https://github.com/your-username/your-repo-name.git
+   git remote add origin https://github.com/Holuphilix/terraform-ecs-webapp.git
    git branch -M main
    git push -u origin main
    ```
+
+### Acknowledgements
+
+Special thanks to:
+
+    AWS Documentation
+
+    HashiCorp Terraform Guides
+
+    Docker Community
+
+✨ Author
+
+Philip Oluwaseyi Oludolamu - DevOps Engineer
