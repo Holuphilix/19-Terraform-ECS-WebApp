@@ -1,4 +1,4 @@
-# 🛠️ Hosting a Dynamic Web App on AWS with Terraform Module, Docker, Amazon ECR, and ECS
+# 🛠️Mini Project: Hosting a Dynamic Web App on AWS with Terraform Module, Docker, Amazon ECR, and ECS
 
 ## 📌 Project Overview
 
